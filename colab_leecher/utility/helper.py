@@ -325,9 +325,12 @@ def speedETA(start, done, total):
 async def message_deleter(message1, message2):
     try:
         await message1.delete()
+    except Exception as e:
+        logging.error(f"MSG1 Delete Failed: {e}")
+    try:
         await message2.delete()
     except Exception as e:
-        logging.error(f"MSG Delete Failed: {e}")
+        logging.error(f"MSG2 Delete Failed: {e}")
 
 
 async def send_settings(client, message, msg_id, command: bool):
