@@ -4,14 +4,20 @@ import logging, json
 from uvloop import install
 from pyrogram.client import Client
 import asyncio
-import uvloop
+import os
 
-# ---- Fix: ensure a running event loop exists before Pyrogram Client ----
+# ---- Fix: ensure a running event loop before Pyrogram Client ----
+# Disable uvloop because it's not yet compatible with Python 3.12 in Colab
+os.environ["PYROGRAM_DISABLE_UVLOOP"] = "1"
+
 try:
     asyncio.get_running_loop()
 except RuntimeError:
     asyncio.set_event_loop(asyncio.new_event_loop())
-uvloop.install()
+# -----------------------------------------------------------------
+
+from pyrogram import Client
+
 
 # Read the dictionary from the txt file
 with open("/content/Telegram-Leecher/credentials.json", "r") as file:
