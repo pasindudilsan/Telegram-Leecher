@@ -3,18 +3,24 @@
 import logging, json
 from uvloop import install
 from pyrogram.client import Client
-import asyncio
 import os
+import asyncio
+import sys
 
-# ---- Fix: ensure a running event loop before Pyrogram Client ----
-# Disable uvloop because it's not yet compatible with Python 3.12 in Colab
+print("Starting Bot....")
+
+# ---- Hard disable uvloop completely ----
 os.environ["PYROGRAM_DISABLE_UVLOOP"] = "1"
+# Make sure uvloop never gets imported
+sys.modules["uvloop"] = None
+# ---------------------------------------
 
+# ---- Ensure asyncio event loop exists ----
 try:
     asyncio.get_running_loop()
 except RuntimeError:
     asyncio.set_event_loop(asyncio.new_event_loop())
-# -----------------------------------------------------------------
+# ------------------------------------------
 
 from pyrogram import Client
 
